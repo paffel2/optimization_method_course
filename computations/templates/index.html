@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+    <h1>Добро пожаловать в систему</h1>
+    <a href="{% url 'computations:logout' %}">Выход</a>
+
+    <a href="{% url 'computations:input' %}" class="btn btn-primary">
+        Новый расчет
+    </a>
+    <a href="{% url 'computations:results' %}" class="btn btn-primary">
+        История расчетов
+    </a>

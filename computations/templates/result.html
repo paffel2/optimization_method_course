@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Результаты расчета{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-header">Результаты расчета №{{ obj.id }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Параметры функции:</h5>
+                        <ul>
+                            <li>Aльфа:{{ obj.alpha }}</li>
+                            <li>Бэта: {{ obj.beta }}</li>
+                            <li>Гамма: {{ obj.gamma }}</li>
+                            <li>H: {{ obj.h }}</li>
+                            <li>N: {{ obj.n }}</li>
+                            <li>{{ obj.l_min }} &lt L &lt {{ obj.l_max }}</li>
+                            <li>{{ obj.s_min }} &lt S &lt {{ obj.s_max }}</li>
+                            <li> L + S &lte {{obj.sum_sum_constraint}}</li>
+                            <li> Метод: {{ obj.get_computation_model_display }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Полученые результаты:</h5>
+                        <ul>
+                            <li>L: {{ L }}</li>
+                            <li>S: {{ S }}</li>
+                            <li>F(L,S): {{ value }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h5>График Линий равного уровня:</h5>
+                        <img src="data:image/png;base64,{{ graph1 }}">
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <h5>Поверхность отклика</h5>
+                        {{ plot_div|safe }}
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'computations:input' %}" class="btn btn-primary">
+                        Новый расчет
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+<h2>Результаты</h2>
+
+<p>L = {{ L }}</p>
+<p>S = {{ S }}</p>
+<p>Минимальный вес = {{ value }}</p>
+<p>Стоимость = {{ cost }}</p>
+
+<h3>Линии уровня функции</h3>
+
+<h3>3D поверхность отклика</h3>
+
+{{ plot_div|safe }}

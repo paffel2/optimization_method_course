@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}История расчетов{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title">История расчетов</h4>
+                <a href="{% url 'computations:input' %}" class="btn btn-primary">
+                    Новый расчет
+                </a>
+            </div>
+            <div class="card-body">
+                {% if objects %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Дата проведения</th>
+                                <th>L</th>
+                                <th>S</th>
+                                <th>Ссылка на результат</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for obj in objects %}
+                            <tr>
+                                <td>{{ obj.id }}</td>
+                                <td>{{ obj.created_at|date:"d.m.Y H:i" }}</td>
+                                <td>{{ obj.l_result }}</td>
+                                <td>{{ obj.s_result }}</td>
+                                <td>
+                                    <a href="{% url 'computations:result' obj.id %}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                       Результаты
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <p class="text-muted">Расчеты еще не проводились</p>
+                    <a href="{% url 'computations:input' %}" class="btn btn-primary">
+                        Провести первый расчет
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
