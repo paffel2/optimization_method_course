@@ -19,9 +19,9 @@
                             <li>Гамма: {{ obj.gamma }}</li>
                             <li>H: {{ obj.h }}</li>
                             <li>N: {{ obj.n }}</li>
-                            <li>{{ obj.l_min }} &lt L &lt {{ obj.l_max }}</li>
-                            <li>{{ obj.s_min }} &lt S &lt {{ obj.s_max }}</li>
-                            <li> L + S &lte {{obj.sum_sum_constraint}}</li>
+                            <li>{{ obj.l_min }} &le; L &le; {{ obj.l_max }}</li>
+                            <li>{{ obj.s_min }} &le; S &le; {{ obj.s_max }}</li>
+                            <li> L + S &le; {{obj.sum_constraint}}</li>
                             <li> Метод: {{ obj.get_computation_model_display }}</li>
                         </ul>
                     </div>

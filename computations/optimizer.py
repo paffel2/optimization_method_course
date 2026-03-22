@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.optimize import minimize, approx_fprime
+from scipy.optimize import minimize
 from scipy.optimize import Bounds, LinearConstraint
 
 
@@ -48,22 +48,31 @@ class SteepestDescentOptimizer:
 
         return np.array([dL, dS])
 
-    def project(self, x):
+    def project(self, x, max_iter=1000):
 
         L, S = x
+
+        for _ in range(max_iter):
+            L_prev, S_prev = L, S
+
+            L = min(max(L, self.L_min), self.L_max)
+            S = min(max(S, self.S_min), self.S_max)
+
+            if L + S < self.sum_constraint:
+                diff = (self.sum_constraint - (L + S)) / 2
+                L += diff
+                S += diff
+            else:
+                break
+            if abs(L - L_prev) < 1e-10 and abs(S - S_prev) < 1e-10:
+                break
 
         L = min(max(L, self.L_min), self.L_max)
         S = min(max(S, self.S_min), self.S_max)
 
-        if L + S < self.sum_constraint:
-            diff = (self.sum_constraint - (L + S)) / 2
-            L += diff
-            S += diff
-
-        return np.array([L, S])
+        return np.array([L, S], dtype=float)
 
     def gradient_method(self, x0, tol=0.01, max_iter=1000):
-
         x = np.array(x0, dtype=float)
         history = [x.copy()]
 
@@ -71,27 +80,26 @@ class SteepestDescentOptimizer:
 
             g = self.grad(x)
 
-            if np.linalg.norm(g) < tol:
+            if g[0] ** 2 + g[1] ** 2 < tol:
                 break
 
             d = -g
-            alpha = 1
+            step = 1
 
             while True:
 
-                x_new = self.project(x + alpha * d)
+                x_new = self.project(x + step * d, max_iter)
 
                 if self.f(*x_new) < self.f(*x):
                     break
 
-                alpha *= 0.5
+                step *= 0.5
 
-                if alpha < 1e-6:
+                if step < 1e-6:
                     break
 
             x = x_new
             history.append(x.copy())
-
         return x, self.f(*x), np.array(history)
 
     def _create_constraints(self):

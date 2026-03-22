@@ -50,7 +50,9 @@ class OptimizationModel(models.Model):
         verbose_name_plural = "Результат оптимизации"
 
     def calculate(self):
-        x0 = [7, 6]
+        s0 = (self.s_min + self.s_max) / 2
+        l0 = (self.l_min + self.l_max) / 2
+        x0 = [l0, s0]
         optimizer = SteepestDescentOptimizer(
             self.alpha,
             self.beta,
